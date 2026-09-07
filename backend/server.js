@@ -1,10 +1,13 @@
 require("dotenv").config();
 
 const express = require("express");
+const authRoutes = require("./src/routes/authRoutes");
 
 const app = express();
 
 app.use(express.json());
+
+app.use("/api/auth", authRoutes);
 
 app.get("/health", (req, res) => {
   res.json({ status: "OK" });
@@ -19,3 +22,5 @@ pool.query("SELECT NOW()")
   .catch((error) => {
     console.error("❌ Database connection failed:", error.message);
   });
+
+module.exports = app;

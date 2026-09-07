@@ -1,5 +1,5 @@
 const bcrypt = require("bcrypt");
-const db = require("../config/database");
+const db = require("../../config/database");
 const { generateToken } = require("../utils/jwt");
 
 const registerUser = async (email, password) => {
