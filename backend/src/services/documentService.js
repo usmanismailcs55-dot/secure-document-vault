@@ -51,7 +51,8 @@ const getDocumentForDownload = async (userId, documentId) => {
   const result = await db.query(
     `SELECT *
      FROM documents
-     WHERE id = $1 AND owner_id = $2`,
+     WHERE id = $1
+       AND owner_id = $2`,
     [documentId, userId]
   );
 
@@ -65,7 +66,8 @@ const getDocumentForDownload = async (userId, documentId) => {
 const deleteDocument = async (userId, documentId) => {
   const result = await db.query(
     `DELETE FROM documents
-     WHERE id = $1 AND owner_id = $2
+     WHERE id = $1
+       AND owner_id = $2
      RETURNING *`,
     [documentId, userId]
   );

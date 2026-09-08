@@ -4,8 +4,11 @@ const express = require("express");
 
 const authRoutes = require("./src/routes/authRoutes");
 const documentRoutes = require("./src/routes/documentRoutes");
+const pool = require("./config/database");
 
 const app = express();
+
+const PORT = process.env.PORT || 5000;
 
 // 📦 Parse JSON request bodies
 app.use(express.json());
@@ -22,8 +25,6 @@ app.get("/health", (req, res) => {
 });
 
 // 🗄️ Test database connection
-const pool = require("./config/database");
-
 pool
   .query("SELECT NOW()")
   .then(() => {
@@ -32,5 +33,10 @@ pool
   .catch((error) => {
     console.error("❌ Database connection failed:", error.message);
   });
+
+// 🚀 Start server
+app.listen(PORT, () => {
+  console.log(`🚀 Server running on port ${PORT}`);
+});
 
 module.exports = app;

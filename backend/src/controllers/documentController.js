@@ -8,6 +8,7 @@ const uploadDocument = async (req, res, next) => {
     const document = await documentService.uploadDocument(userId, file);
 
     res.status(201).json({
+      success: true,
       message: "Document uploaded successfully",
       document,
     });
@@ -23,6 +24,7 @@ const listDocuments = async (req, res, next) => {
     const documents = await documentService.getUserDocuments(userId);
 
     res.status(200).json({
+      success: true,
       documents,
     });
   } catch (error) {
@@ -40,7 +42,7 @@ const downloadDocument = async (req, res, next) => {
       documentId
     );
 
-    res.download(document.filePath, document.originalFilename);
+    res.download(document.file_path, document.original_filename);
   } catch (error) {
     next(error);
   }
@@ -54,6 +56,7 @@ const deleteDocument = async (req, res, next) => {
     await documentService.deleteDocument(userId, documentId);
 
     res.status(200).json({
+      success: true,
       message: "Document deleted successfully",
     });
   } catch (error) {
