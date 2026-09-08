@@ -1,9 +1,11 @@
 const db = require("../../config/database");
+
 const {
   hashPassword,
   comparePassword,
-} = require("../utils/passwordsutils");
-const { generateToken } = require("../utils/jwt");
+} = require("../utils/passwordUtils");
+
+const { generateToken } = require("../utils/jwtUtils");
 
 const registerUser = async (email, password) => {
   const passwordHash = await hashPassword(password);
