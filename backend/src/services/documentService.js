@@ -7,7 +7,7 @@ const uploadDocument = async (userId, file) => {
 
   const result = await db.query(
     `INSERT INTO documents (
-       user_id,
+       owner_id,
        original_filename,
        stored_filename,
        file_path,
@@ -39,7 +39,7 @@ const getUserDocuments = async (userId) => {
        file_size,
        created_at
      FROM documents
-     WHERE user_id = $1
+     WHERE owner_id = $1
      ORDER BY created_at DESC`,
     [userId]
   );
@@ -51,7 +51,7 @@ const getDocumentForDownload = async (userId, documentId) => {
   const result = await db.query(
     `SELECT *
      FROM documents
-     WHERE id = $1 AND user_id = $2`,
+     WHERE id = $1 AND owner_id = $2`,
     [documentId, userId]
   );
 
@@ -65,7 +65,7 @@ const getDocumentForDownload = async (userId, documentId) => {
 const deleteDocument = async (userId, documentId) => {
   const result = await db.query(
     `DELETE FROM documents
-     WHERE id = $1 AND user_id = $2
+     WHERE id = $1 AND owner_id = $2
      RETURNING *`,
     [documentId, userId]
   );
