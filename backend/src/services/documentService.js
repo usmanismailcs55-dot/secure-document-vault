@@ -1,3 +1,6 @@
+const fs = require("fs/promises");
+const path = require("path");
+
 const db = require("../../config/database");
 
 const uploadDocument = async (userId, file) => {
@@ -73,10 +76,22 @@ const deleteDocument = async (userId, documentId) => {
   );
 
   if (result.rows.length === 0) {
-    throw new Error("Document not found");
+    const error = new Error("Document not found");
+    error.statusCode = 404;
+    throw error;
   }
 
-  return result.rows[0];
+  const document = result.rows[0];
+
+  try {
+    await fs.unlink(document.file_path);
+  } catch (error) {
+    if (error.code !== "ENOENT") {
+      throw error;
+    }
+  }
+
+  return document;
 };
 
 module.exports = {

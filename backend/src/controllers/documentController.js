@@ -42,7 +42,15 @@ const downloadDocument = async (req, res, next) => {
       documentId
     );
 
-    res.download(document.file_path, document.original_filename);
+    res.download(
+      document.file_path,
+      document.original_filename,
+      (error) => {
+        if (error) {
+          next(error);
+        }
+      }
+    );
   } catch (error) {
     next(error);
   }
