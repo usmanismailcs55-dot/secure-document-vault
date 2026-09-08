@@ -1,18 +1,29 @@
-const bcrypt = require("bcrypt");
 const db = require("../../config/database");
+const {
+  hashPassword,
+  comparePassword,
+} = require("../utils/passwordsutils");
 const { generateToken } = require("../utils/jwt");
 
 const registerUser = async (email, password) => {
-  const passwordHash = await bcrypt.hash(password, 12);
+  const passwordHash = await hashPassword(password);
 
-  const result = await db.query(
-    `INSERT INTO users (email, password_hash)
-     VALUES ($1, $2)
-     RETURNING id, email, created_at`,
-    [email, passwordHash]
-  );
+  try {
+    const result = await db.query(
+      `INSERT INTO users (email, password_hash)
+       VALUES ($1, $2)
+       RETURNING id, email, created_at`,
+      [email, passwordHash]
+    );
 
-  return result.rows[0];
+    return result.rows[0];
+  } catch (error) {
+    if (error.code === "23505") {
+      throw new Error("Email is already registered");
+    }
+
+    throw error;
+  }
 };
 
 const loginUser = async (email, password) => {
@@ -29,7 +40,7 @@ const loginUser = async (email, password) => {
 
   const user = result.rows[0];
 
-  const passwordMatch = await bcrypt.compare(
+  const passwordMatch = await comparePassword(
     password,
     user.password_hash
   );
