@@ -4,6 +4,7 @@ const express = require("express");
 
 const authRoutes = require("./src/routes/authRoutes");
 const documentRoutes = require("./src/routes/documentRoutes");
+const errorMiddleware = require("./src/middleware/errorMiddleware");
 const pool = require("./config/database");
 
 const app = express();
@@ -23,6 +24,11 @@ app.use("/api/documents", documentRoutes);
 app.get("/health", (req, res) => {
   res.json({ status: "OK" });
 });
+
+
+
+// 🚨 Global error handling
+app.use(errorMiddleware);
 
 // 🗄️ Test database connection
 pool
