@@ -1,10 +1,25 @@
 const documentService = require("../services/documentService");
+const fs = require("fs/promises");
 
 const uploadDocument = async (req, res, next) => {
+  let filePath;
+
   try {
     const userId = req.user.id;
     const file = req.file;
 
+    // Make sure a file was actually uploaded
+    if (!file) {
+      return res.status(400).json({
+        success: false,
+        message: "No file uploaded",
+      });
+    }
+
+    // Save the uploaded file path
+    filePath = file.path;
+
+    // Store document information in the database
     const document = await documentService.uploadDocument(userId, file);
 
     res.status(201).json({
@@ -13,6 +28,16 @@ const uploadDocument = async (req, res, next) => {
       document,
     });
   } catch (error) {
+    // If database/storage processing fails,
+    // remove the physical uploaded file
+    if (filePath) {
+      try {
+        await fs.unlink(filePath);
+      } catch (deleteError) {
+        console.error("Failed to delete uploaded file:", deleteError);
+      }
+    }
+
     next(error);
   }
 };
