@@ -1,6 +1,6 @@
-
 import { useState } from "react";
 import api from "../services/api";
+import "../styles/Register.css";
 
 function Register() {
   const [formData, setFormData] = useState({
@@ -62,11 +62,11 @@ function Register() {
   };
 
   return (
-    <div>
+    <div className="register-container">
       <h1>Create Account</h1>
 
-      {error && <p>{error}</p>}
-      {success && <p>{success}</p>}
+      {error && <p className="register-error">{error}</p>}
+      {success && <p className="register-success">{success}</p>}
 
       <form onSubmit={handleSubmit}>
         <div>
@@ -111,4 +111,3 @@ function Register() {
 }
 
 export default Register;
-

@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useAuth } from "../context/AuthContext";
+import "../styles/Login.css";
 
 export default function Login() {
   const { token } = useAuth();
@@ -15,7 +16,7 @@ export default function Login() {
   };
 
   return (
-    <div>
+    <div className="login-container">
       <h1>Login</h1>
 
       <p>Token: {token ? "Available" : "Not available"}</p>
