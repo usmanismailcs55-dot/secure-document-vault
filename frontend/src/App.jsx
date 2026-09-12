@@ -1,18 +1,16 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Login from "./pages/Login";
-import Register from "./pages/Register";
-import Dashboard from "./pages/Dashboard";
+import { useAuth } from "./context/AuthContext";
 
 function App() {
+  const { token } = useAuth();
+
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<Login />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
-        <Route path="/dashboard" element={<Dashboard />} />
-      </Routes>
-    </BrowserRouter>
+    <div>
+      <h1>Secure Document Vault</h1>
+
+      <p>
+        {token ? "You are logged in" : "You are not logged in"}
+      </p>
+    </div>
   );
 }
 
