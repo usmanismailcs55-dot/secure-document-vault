@@ -1,6 +1,7 @@
 require("dotenv").config();
 
 const express = require("express");
+const logger = require("./src/utils/logger");
 
 const authRoutes = require("./src/routes/authRoutes");
 const documentRoutes = require("./src/routes/documentRoutes");
@@ -25,8 +26,6 @@ app.get("/health", (req, res) => {
   res.json({ status: "OK" });
 });
 
-
-
 // 🚨 Global error handling
 app.use(errorMiddleware);
 
@@ -34,15 +33,17 @@ app.use(errorMiddleware);
 pool
   .query("SELECT NOW()")
   .then(() => {
-    console.log("✅ Neon database connected!");
+    logger.info("Neon database connected!");
   })
   .catch((error) => {
-    console.error("❌ Database connection failed:", error.message);
+    logger.error("Database connection failed", {
+      error: error.message,
+    });
   });
 
 // 🚀 Start server
 app.listen(PORT, () => {
-  console.log(`🚀 Server running on port ${PORT}`);
+  logger.info(`Server running on port ${PORT}`);
 });
 
 module.exports = app;
