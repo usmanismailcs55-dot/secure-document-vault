@@ -71,13 +71,18 @@ const downloadDocument = async (req, res, next) => {
       document.file_path,
       document.original_filename,
       (error) => {
-        if (error) {
+        // Handle download failure only if
+        // the response has not already started
+        if (error && !res.headersSent) {
           next(error);
         }
       }
     );
   } catch (error) {
-    next(error);
+    // Handle errors that occur before the download starts
+    if (!res.headersSent) {
+      next(error);
+    }
   }
 };
 

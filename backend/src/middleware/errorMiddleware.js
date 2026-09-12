@@ -1,13 +1,20 @@
 const errorMiddleware = (err, req, res, next) => {
-  console.error(err);
+  // Log the full error on the server
+  console.error("Error:", err);
 
   const statusCode = err.statusCode || 500;
 
-  res.status(statusCode).json({
-    message:
-      statusCode === 500
-        ? "Internal server error"
-        : err.message,
+  // Never expose database/internal error details to the client
+  if (statusCode === 500) {
+    return res.status(500).json({
+      success: false,
+      message: "Internal server error",
+    });
+  }
+
+  return res.status(statusCode).json({
+    success: false,
+    message: err.message || "Request failed",
   });
 };
 
