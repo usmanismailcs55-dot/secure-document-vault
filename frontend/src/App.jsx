@@ -1,16 +1,13 @@
-import { useAuth } from "./context/AuthContext";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Login from "./pages/Login";
 
 function App() {
-  const { token } = useAuth();
-
   return (
-    <div>
-      <h1>Secure Document Vault</h1>
-
-      <p>
-        {token ? "You are logged in" : "You are not logged in"}
-      </p>
-    </div>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Login />} />
+      </Routes>
+    </BrowserRouter>
   );
 }
 
