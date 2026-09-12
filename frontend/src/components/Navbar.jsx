@@ -1,6 +1,7 @@
 import { Link, useNavigate } from "react-router-dom";
-import { Shield, LayoutDashboard, LogOut } from "lucide-react";
+import { LayoutDashboard, LogOut } from "lucide-react";
 import "../styles/navbar.css";
+import logo from "../assets/logo.svg";
 
 export default function Navbar() {
   const navigate = useNavigate();
@@ -13,7 +14,7 @@ export default function Navbar() {
   return (
     <nav>
       <Link to="/dashboard">
-        <Shield size={22} />
+        <img src={logo} alt="Secure Document Vault" className="logo" />
         <span>Secure Vault</span>
       </Link>
 
