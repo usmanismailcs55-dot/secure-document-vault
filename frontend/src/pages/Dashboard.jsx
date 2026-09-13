@@ -1,8 +1,8 @@
-
 import { useEffect, useState } from "react";
 import Navbar from "../components/Navbar";
 import UploadForm from "../components/UploadForm";
 import DocumentList from "../components/DocumentList";
+import SuccessMessage from "../components/SuccessMessage";
 import { getDocuments } from "../services/documentService";
 import api from "../services/api";
 import "../styles/Dashboard.css";
@@ -10,6 +10,7 @@ import "../styles/Dashboard.css";
 function Dashboard() {
   const [documents, setDocuments] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [successMessage, setSuccessMessage] = useState("");
 
   useEffect(() => {
     loadDocuments();
@@ -26,6 +27,16 @@ function Dashboard() {
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleUploadSuccess = async () => {
+    await loadDocuments();
+
+    setSuccessMessage("Document uploaded successfully!");
+
+    setTimeout(() => {
+      setSuccessMessage("");
+    }, 3000);
   };
 
   const handleView = async (documentId) => {
@@ -65,7 +76,9 @@ function Dashboard() {
         <h1>Secure Document Vault</h1>
         <p>Welcome to your dashboard.</p>
 
-        <UploadForm onUploadSuccess={loadDocuments} />
+        <SuccessMessage message={successMessage} />
+
+        <UploadForm onUploadSuccess={handleUploadSuccess} />
 
         {loading ? (
           <div className="loading-state">
@@ -84,5 +97,4 @@ function Dashboard() {
   );
 }
 
-export default Dashboard; 
-
+export default Dashboard;
