@@ -1,19 +1,50 @@
 import { useState } from "react";
+import api from "../services/api";
 
-function UploadForm() {
+function UploadForm({ onUploadSuccess }) {
   const [file, setFile] = useState(null);
   const [message, setMessage] = useState("");
+  const [uploading, setUploading] = useState(false);
 
   const handleFileChange = (event) => {
     setFile(event.target.files[0]);
     setMessage("");
   };
 
-  const handleUpload = () => {
+  const handleUpload = async () => {
     if (!file) return;
 
-    setMessage(`"${file.name}" is ready to upload.`);
-    console.log("File ready to upload:", file);
+    const formData = new FormData();
+    formData.append("file", file);
+
+    try {
+      setUploading(true);
+      setMessage("");
+
+      const response = await api.post("/documents/upload", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+
+      console.log("📤 Upload response:", response.data);
+
+      setMessage(`✅ "${file.name}" uploaded successfully.`);
+      setFile(null);
+
+      if (onUploadSuccess) {
+        onUploadSuccess();
+      }
+    } catch (error) {
+      console.error("❌ Upload error:", error);
+
+      setMessage(
+        error.response?.data?.message ||
+          "❌ Upload failed. Please try again."
+      );
+    } finally {
+      setUploading(false);
+    }
   };
 
   return (
@@ -31,9 +62,9 @@ function UploadForm() {
       <button
         type="button"
         onClick={handleUpload}
-        disabled={!file}
+        disabled={!file || uploading}
       >
-        Upload
+        {uploading ? "Uploading..." : "Upload"}
       </button>
 
       {message && <p>{message}</p>}

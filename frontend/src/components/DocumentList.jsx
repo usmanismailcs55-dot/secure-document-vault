@@ -1,6 +1,11 @@
 import React from "react";
 
-function DocumentList({ documents = [], onDownload, onDelete }) {
+function DocumentList({
+  documents = [],
+  onView,
+  onDownload,
+  onDelete,
+}) {
   if (documents.length === 0) {
     return (
       <div className="document-list-empty">
@@ -33,6 +38,14 @@ function DocumentList({ documents = [], onDownload, onDelete }) {
           </div>
 
           <div className="document-actions">
+            <button
+              type="button"
+              onClick={() => onView(document.id)}
+              className="view-button"
+            >
+              👁️ View
+            </button>
+
             <button
               type="button"
               onClick={() => onDownload(document.id)}
