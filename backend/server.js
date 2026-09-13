@@ -1,6 +1,7 @@
 require("dotenv").config();
 
 const express = require("express");
+const cors = require("cors");
 const logger = require("./src/utils/logger");
 
 const authRoutes = require("./src/routes/authRoutes");
@@ -11,6 +12,13 @@ const pool = require("./config/database");
 const app = express();
 
 const PORT = process.env.PORT || 5000;
+
+// 🌐 Configure CORS
+app.use(
+  cors({
+    origin: "http://localhost:5173",
+  })
+);
 
 // 📦 Parse JSON request bodies
 app.use(express.json());

@@ -1,4 +1,5 @@
 import Navbar from "../components/Navbar";
+import UploadForm from "../components/UploadForm";
 import "../styles/Dashboard.css";
 
 function Dashboard() {
@@ -9,6 +10,8 @@ function Dashboard() {
       <div className="dashboard-container">
         <h1>Secure Document Vault</h1>
         <p>Welcome to your dashboard.</p>
+
+        <UploadForm />
       </div>
     </>
   );
