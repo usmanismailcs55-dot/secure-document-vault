@@ -1,3 +1,4 @@
+
 import { useEffect, useState } from "react";
 import Navbar from "../components/Navbar";
 import UploadForm from "../components/UploadForm";
@@ -8,17 +9,22 @@ import "../styles/Dashboard.css";
 
 function Dashboard() {
   const [documents, setDocuments] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     loadDocuments();
   }, []);
 
   const loadDocuments = async () => {
+    setLoading(true);
+
     try {
       const data = await getDocuments();
       setDocuments(data);
     } catch (error) {
       console.error("Failed to load documents:", error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -61,15 +67,22 @@ function Dashboard() {
 
         <UploadForm onUploadSuccess={loadDocuments} />
 
-        <DocumentList
-          documents={documents}
-          onView={handleView}
-          onDownload={handleDownload}
-          onDelete={handleDelete}
-        />
+        {loading ? (
+          <div className="loading-state">
+            ⏳ Loading documents...
+          </div>
+        ) : (
+          <DocumentList
+            documents={documents}
+            onView={handleView}
+            onDownload={handleDownload}
+            onDelete={handleDelete}
+          />
+        )}
       </div>
     </>
   );
 }
 
-export default Dashboard;
+export default Dashboard; 
+

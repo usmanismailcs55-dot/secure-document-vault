@@ -12,3 +12,11 @@
   color: #666;
   margin-bottom: 30px;
 }
+.delete-button {
+  padding: 8px 12px;
+  border: 1px solid #dc2626;
+  border-radius: 6px;
+  background: white;
+  color: #dc2626;
+  cursor: pointer;
+}
